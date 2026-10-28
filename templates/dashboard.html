@@ -1,0 +1,737 @@
+{% extends 'base.html' %}
+
+{% block title %}OptiQueue AI | Dashboard Ejecutivo & Shark Tank{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+
+    <!-- HERO SECTION / PRESENTATION BANNER -->
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900/90 to-indigo-950/60 border border-slate-800 p-6 sm:p-8">
+        <div class="absolute -right-16 -top-16 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div class="space-y-3 max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wide uppercase">
+                    <i class="fa-solid fa-brain"></i> Investigación de Operaciones · Ejercicio 4
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                    Optimización Inteligente de Colas en <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Migración Aeroportuaria</span>
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                    Solución algorítmica integral con <strong class="text-white">Teoría de Colas M/M/c</strong>, 
+                    <strong class="text-white">Simulación de Eventos Discretos en SimPy</strong> y 
+                    <strong class="text-white">Programación Entera en PuLP</strong> definiendo exclusivamente las variables 
+                    <code class="px-2 py-0.5 rounded bg-slate-800 text-cyan-300 font-mono text-xs font-bold">x</code> e 
+                    <code class="px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-mono text-xs font-bold">y</code>.
+                </p>
+
+                <!-- Parameter Badges Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-2 text-xs">
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-2.5">
+                        <span class="text-slate-400 block text-[11px]">Tasa Llegada (λ)</span>
+                        <span class="font-bold text-white text-sm">180 pas/h</span>
+                    </div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-2.5">
+                        <span class="text-slate-400 block text-[11px]">Tasa Servicio (μ)</span>
+                        <span class="font-bold text-white text-sm">15 pas/h</span>
+                    </div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-2.5">
+                        <span class="text-slate-400 block text-[11px]">Costo Ventanilla</span>
+                        <span class="font-bold text-white text-sm">$50 USD/h</span>
+                    </div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-2.5">
+                        <span class="text-slate-400 block text-[11px]">Costo Espera</span>
+                        <span class="font-bold text-white text-sm">$40 USD/h/pas</span>
+                    </div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-2.5 col-span-2 sm:col-span-1">
+                        <span class="text-slate-400 block text-[11px]">Límite Espera</span>
+                        <span class="font-bold text-rose-400 text-sm">≤ 6.0 min (0.1 h)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions and Live Solver Buttons -->
+            <div class="flex flex-col sm:flex-row lg:flex-col gap-3 min-w-[240px]">
+                <button onclick="ejecutarOptimizacionEnVivo()" 
+                        class="w-full px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 group">
+                    <i class="fa-solid fa-play group-hover:scale-110 transition-transform"></i>
+                    <span>Optimizar con PuLP (x, y)</span>
+                </button>
+                <button onclick="abrirModalSimulacion()" 
+                        class="w-full px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold text-sm transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate text-emerald-400"></i>
+                    <span>Correr SimPy en Vivo</span>
+                </button>
+                <a href="{% url 'migracion:vista_documentacion_doc' '01' %}" 
+                   class="w-full px-5 py-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white text-center text-xs font-semibold transition-all">
+                    <i class="fa-solid fa-file-pen mr-1.5 text-amber-400"></i>Ver Trabajo Escrito a Mano
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESPUESTAS ANALÍTICAS PRINCIPALES (TARJETAS GRANDES SHARK TANK) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- PREGUNTA ANALÍTICA 1 -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-darkcard to-slate-900 border-2 border-emerald-500/40 p-6 shadow-xl shadow-emerald-950/20">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="space-y-1">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-black uppercase tracking-wider">
+                        <i class="fa-solid fa-circle-check"></i> Pregunta Analítica 1
+                    </div>
+                    <h2 class="text-xl font-bold text-white">Número Óptimo de Ventanillas</h2>
+                    <p class="text-xs text-slate-400">Minimiza el costo total combinado cumpliendo la restricción de Wq ≤ 6 min.</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block font-mono">Variable Óptima</span>
+                    <span class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 font-mono">
+                        x* = {{ optimo.c }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center mb-4">
+                <div>
+                    <span class="text-[11px] text-slate-400 block">Costo Total (y*)</span>
+                    <span class="text-lg font-black text-white font-mono">${{ optimo.costo_total|floatformat:2 }}</span>
+                    <span class="text-[10px] text-slate-500 block">USD / hora</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block">Tiempo Espera (Wq)</span>
+                    <span class="text-lg font-black text-emerald-400 font-mono">{{ optimo.wq_minutos|floatformat:3 }} min</span>
+                    <span class="text-[10px] text-emerald-500/80 block">≈ 25.5 segundos</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block">Utilización (ρ)</span>
+                    <span class="text-lg font-black text-cyan-400 font-mono">{{ optimo.utilizacion_pct|floatformat:1 }}%</span>
+                    <span class="text-[10px] text-slate-500 block">Capacidad holgada</span>
+                </div>
+            </div>
+
+            <!-- Desglose analítico de costos -->
+            <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center py-1.5 border-b border-slate-800/80 text-slate-300">
+                    <span><i class="fa-solid fa-id-badge text-slate-400 mr-2"></i>Costo Operación Ventanillas (15 × $50):</span>
+                    <span class="font-mono font-bold text-white">${{ optimo.costo_servicio|floatformat:2 }} USD/h</span>
+                </div>
+                <div class="flex justify-between items-center py-1.5 border-b border-slate-800/80 text-slate-300">
+                    <span><i class="fa-solid fa-users text-slate-400 mr-2"></i>Costo Penalización Espera (Lq = {{ optimo.lq|floatformat:3 }} × $40):</span>
+                    <span class="font-mono font-bold text-white">${{ optimo.costo_espera|floatformat:2 }} USD/h</span>
+                </div>
+                <div class="flex justify-between items-center py-1.5 text-slate-300">
+                    <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-2"></i>Cumplimiento Restricción de Servicio (≤ 6.0 min):</span>
+                    <span class="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+                        CUMPLE CON CRECES (0.43 min ≪ 6 min)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PREGUNTA ANALÍTICA 2 -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-b from-darkcard to-slate-900 border-2 border-cyan-500/40 p-6 shadow-xl shadow-cyan-950/20">
+            <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="space-y-1">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 text-xs font-black uppercase tracking-wider">
+                        <i class="fa-solid fa-chart-line"></i> Pregunta Analítica 2
+                    </div>
+                    <h2 class="text-xl font-bold text-white">Impacto Cuantitativo vs 16 Ventanillas</h2>
+                    <p class="text-xs text-slate-400">Comparativa contra el escenario tradicional fijo ($1,120 USD/h reportado).</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block font-mono">Ahorro Horario</span>
+                    <span class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-emerald-400 font-mono">
+                        -${{ analisis.ahorro_hora_vs_reportado|floatformat:2 }}
+                    </span>
+                    <span class="text-[11px] font-bold text-emerald-400 block">-{{ analisis.pct_ahorro_vs_reportado|floatformat:1 }}% Reducción</span>
+                </div>
+            </div>
+
+            <!-- Macro Impact Cards (Día, Mes, Año) -->
+            <div class="grid grid-cols-3 gap-3 p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-center mb-4">
+                <div>
+                    <span class="text-[11px] text-slate-400 block">Ahorro Diario (16h)</span>
+                    <span class="text-base sm:text-lg font-black text-white font-mono">${{ analisis.ahorro_diario_16h|floatformat:0 }}</span>
+                    <span class="text-[10px] text-emerald-400 font-bold block">USD / día</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-slate-400 block">Ahorro Mensual (30d)</span>
+                    <span class="text-base sm:text-lg font-black text-white font-mono">${{ analisis.ahorro_mensual_30d|floatformat:0 }}</span>
+                    <span class="text-[10px] text-emerald-400 font-bold block">USD / mes</span>
+                </div>
+                <div>
+                    <span class="text-[11px] text-amber-400 font-bold block">Ahorro Anual Total</span>
+                    <span class="text-base sm:text-lg font-black text-amber-400 font-mono">${{ analisis.ahorro_anual|floatformat:0 }}</span>
+                    <span class="text-[10px] text-amber-500 font-bold block">USD / año</span>
+                </div>
+            </div>
+
+            <!-- Comparativa Directa Detallada -->
+            <div class="space-y-2 text-xs">
+                <div class="flex justify-between items-center py-1.5 border-b border-slate-800/80 text-slate-300">
+                    <span><i class="fa-solid fa-clock-rotate-left text-slate-400 mr-2"></i>Tiempo de Espera:</span>
+                    <div class="text-right">
+                        <span class="text-slate-400 line-through mr-1">0.20 min</span>
+                        <span class="text-emerald-400 font-bold">→ 0.43 min</span>
+                        <span class="text-[10px] text-slate-500 block">(Aumento marginal imperceptible de +13.5 seg)</span>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center py-1.5 border-b border-slate-800/80 text-slate-300">
+                    <span><i class="fa-solid fa-sack-dollar text-slate-400 mr-2"></i>Ahorro vs 16 Ventanillas Teóricas ($824.55/h):</span>
+                    <span class="font-mono font-bold text-emerald-400">+$23.48 USD/h de ahorro neto</span>
+                </div>
+                <div class="flex justify-between items-center py-1.5 text-slate-300">
+                    <span><i class="fa-solid fa-arrow-trend-down text-cyan-400 mr-2"></i>Veredicto Ejecutivo para el Aeropuerto:</span>
+                    <span class="text-slate-300 font-semibold">
+                        Cerrar 1 ventanilla ahorra $50/h y solo suma 13 seg de fila.
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- SIMULADOR VISUAL INTERACTIVO DE LAS 16 VENTANILLAS -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder p-6 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+                    <h3 class="text-lg font-bold text-white">Gemelo Digital: Control en Vivo de las 16 Ventanillas</h3>
+                </div>
+                <p class="text-xs text-slate-400">Mueve el control deslizante para simular la apertura o cierre de ventanillas y observa el impacto en costos y espera.</p>
+            </div>
+
+            <!-- Interactive Slider Controls -->
+            <div class="flex items-center gap-4 bg-slate-900/90 p-3 rounded-xl border border-slate-800">
+                <span class="text-xs text-slate-300 font-semibold whitespace-nowrap">Ventanillas Abiertas (x):</span>
+                <input type="range" id="sliderVentanillas" min="12" max="18" value="15" step="1" 
+                       oninput="cambiarVentanillasEnVivo(this.value)"
+                       class="w-32 sm:w-44 accent-cyan-400 cursor-pointer">
+                <span id="valorVentanillas" class="font-mono font-extrabold text-cyan-400 text-lg w-8 text-center">15</span>
+            </div>
+        </div>
+
+        <!-- 16 BOOTHS GRID VISUALIZATION -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3" id="gridVentanillas">
+            {% for v in ventanillas_info %}
+            <div id="booth-{{ v.numero }}" 
+                 class="relative rounded-xl p-3 border transition-all duration-300 text-center {{ v.clase_bg }}">
+                <div class="text-[10px] font-mono font-bold uppercase mb-1">
+                    Ventanilla #{{ v.numero }}
+                </div>
+                <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center my-1.5 {% if v.abierta %}bg-emerald-500/20 text-emerald-400{% else %}bg-rose-500/20 text-rose-400{% endif %}">
+                    <i class="fa-solid fa-user-tie text-base"></i>
+                </div>
+                <div id="status-text-{{ v.numero }}" class="text-[11px] font-extrabold tracking-wide uppercase">
+                    {% if v.abierta %}ABIERTA{% else %}CERRADA{% endif %}
+                </div>
+                <div class="text-[9px] text-slate-400 mt-1">
+                    {% if v.abierta %}15 pas/h{% else %}Ahorro $50{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Dynamic Live Metric Bar for Selected Slider Value -->
+        <div id="barraMetricasEnVivo" class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 grid grid-cols-2 sm:grid-cols-5 gap-4 text-center text-xs">
+            <div>
+                <span class="text-slate-400 block text-[11px]">Ventanillas (x)</span>
+                <span id="liveX" class="font-mono font-bold text-white text-base">15</span>
+            </div>
+            <div>
+                <span class="text-slate-400 block text-[11px]">Utilización (ρ)</span>
+                <span id="liveRho" class="font-mono font-bold text-cyan-400 text-base">80.0%</span>
+            </div>
+            <div>
+                <span class="text-slate-400 block text-[11px]">Tiempo Espera (Wq)</span>
+                <span id="liveWq" class="font-mono font-bold text-emerald-400 text-base">0.43 min</span>
+            </div>
+            <div>
+                <span class="text-slate-400 block text-[11px]">Costo Total Horario</span>
+                <span id="liveCosto" class="font-mono font-bold text-white text-base">$801.07 USD/h</span>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+                <span class="text-slate-400 block text-[11px]">Veredicto Norma</span>
+                <span id="liveNorma" class="font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded inline-block text-[11px]">
+                    CUMPLE (≤6 min)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO ANALÍTICO: TIEMPO DE ESPERA VS COSTO TOTAL -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder p-6 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-chart-area text-cyan-400 text-lg"></i>
+                    <h3 class="text-lg font-bold text-white">Gráfico Analítico: Tiempo de Espera vs Costo Total</h3>
+                </div>
+                <p class="text-xs text-slate-400">Requisito obligatorio del profesor. Muestra el comportamiento de colas, el equilibrio de costos y el óptimo x* = 15.</p>
+            </div>
+            <!-- Toggle View: Chart.js Interactive vs Python Matplotlib Native -->
+            <div class="flex items-center p-1 bg-slate-900 rounded-xl border border-slate-800 text-xs">
+                <button id="btnVerChartJs" onclick="cambiarVistaGrafico('chartjs')" 
+                        class="px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-white transition-all">
+                    <i class="fa-solid fa-chart-line mr-1"></i>Chart.js Interactivo
+                </button>
+                <button id="btnVerMatplotlib" onclick="cambiarVistaGrafico('matplotlib')" 
+                        class="px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition-all">
+                    <i class="fa-brands fa-python mr-1 text-amber-400"></i>Python Matplotlib (Nativo)
+                </button>
+            </div>
+        </div>
+
+        <!-- View 1: Chart.js Interactive Canvas -->
+        <div id="contenedorChartJs" class="relative w-full h-[400px]">
+            <canvas id="graficoAnaliticoCanvas"></canvas>
+        </div>
+
+        <!-- View 2: Matplotlib Native Exported PNG -->
+        <div id="contenedorMatplotlib" class="hidden text-center">
+            {% if grafico_b64 %}
+            <div class="inline-block p-2 rounded-2xl bg-slate-950 border border-slate-800 shadow-2xl">
+                <img src="data:image/png;base64,{{ grafico_b64 }}" 
+                     alt="Gráfico Analítico Generado en Matplotlib" 
+                     class="rounded-xl max-w-full h-auto mx-auto">
+            </div>
+            <p class="text-xs text-slate-500 mt-2 font-mono">
+                <i class="fa-solid fa-circle-check text-emerald-400 mr-1"></i>
+                Generado directamente por Python (matplotlib backend Agg) y guardado en <code>static/img/grafico_analitico.png</code>
+            </p>
+            {% else %}
+            <p class="text-slate-400 text-sm">El gráfico de Matplotlib se está procesando...</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- TABLA COMPLETA DE ESCENARIOS Y COMPARATIVAS (c = 12 A 20) -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder p-6 space-y-4">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-table-list text-indigo-400"></i>
+                    Tabla Analítica Comparativa de Escenarios (M/M/c)
+                </h3>
+                <p class="text-xs text-slate-400">Evaluación rigurosa de estabilidad, tiempos de espera, costos y cumplimiento de normas.</p>
+            </div>
+            <span class="text-xs font-mono text-slate-500">λ = 180 pas/h · μ = 15 pas/h</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-xs text-left">
+                <thead class="bg-slate-900/90 text-slate-300 uppercase font-mono text-[10px] tracking-wider border-b border-slate-800">
+                    <tr>
+                        <th class="py-3 px-3">Ventanillas (x)</th>
+                        <th class="py-3 px-3">Utiliz. (ρ)</th>
+                        <th class="py-3 px-3">Prob. Vacío (P₀)</th>
+                        <th class="py-3 px-3">Prob. Espera (Pw)</th>
+                        <th class="py-3 px-3">Pasajeros Cola (Lq)</th>
+                        <th class="py-3 px-3">Espera (Wq min)</th>
+                        <th class="py-3 px-3">Costo Ventanillas</th>
+                        <th class="py-3 px-3">Costo Espera</th>
+                        <th class="py-3 px-3">Costo Total ($/h)</th>
+                        <th class="py-3 px-3 text-center">Norma ≤6 min</th>
+                        <th class="py-3 px-3 text-right">Veredicto</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 font-mono">
+                    {% for fila in tabla %}
+                    <tr class="transition-colors {% if fila.c == optimo.c %}bg-emerald-500/10 font-bold border-l-4 border-l-emerald-400{% elif fila.c == 16 %}bg-amber-500/5 border-l-4 border-l-amber-400{% elif not fila.estable %}bg-rose-500/5 text-rose-400/80{% else %}hover:bg-slate-800/40 text-slate-300{% endif %}">
+                        <td class="py-3 px-3">
+                            <span class="text-sm font-extrabold {% if fila.c == optimo.c %}text-emerald-400{% elif fila.c == 16 %}text-amber-400{% else %}text-white{% endif %}">
+                                c = {{ fila.c }}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}{{ fila.utilizacion_pct|floatformat:1 }}%{% else %}≥ 100%{% endif %}
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}{{ fila.p0|floatformat:5 }}{% else %}0.00000{% endif %}
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}{{ fila.pw|floatformat:4 }}{% else %}1.0000{% endif %}
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}{{ fila.lq|floatformat:3 }}{% else %}∞{% endif %}
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}
+                                <span class="{% if fila.wq_minutos <= 6.0 %}text-emerald-400{% else %}text-rose-400{% endif %}">
+                                    {{ fila.wq_minutos|floatformat:3 }} min
+                                </span>
+                            {% else %}
+                                <span class="text-rose-500 font-bold">Inestable (∞)</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-3 text-slate-400">${{ fila.costo_servicio|floatformat:2 }}</td>
+                        <td class="py-3 px-3 text-slate-400">
+                            {% if fila.estable %}${{ fila.costo_espera|floatformat:2 }}{% else %}∞{% endif %}
+                        </td>
+                        <td class="py-3 px-3">
+                            {% if fila.estable %}
+                                <span class="text-sm font-bold {% if fila.c == optimo.c %}text-emerald-400 underline decoration-2{% else %}text-white{% endif %}">
+                                    ${{ fila.costo_total|floatformat:2 }}
+                                </span>
+                            {% else %}
+                                <span class="text-rose-500 font-bold">∞</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-3 text-center">
+                            {% if fila.cumple_restriccion %}
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-sans font-bold text-[10px]">CUMPLE</span>
+                            {% else %}
+                                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-sans font-bold text-[10px]">NO CUMPLE</span>
+                            {% endif %}
+                        </td>
+                        <td class="py-3 px-3 text-right font-sans">
+                            {% if fila.c == optimo.c %}
+                                <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-extrabold text-[10px] border border-emerald-500/40">
+                                    ★ ÓPTIMO GLOBAL
+                                </span>
+                            {% elif fila.c == 16 %}
+                                <span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/40">
+                                    ESCENARIO ACTUAL
+                                </span>
+                            {% elif not fila.estable %}
+                                <span class="text-rose-400 font-bold text-[10px]">INADMISIBLE</span>
+                            {% else %}
+                                <span class="text-slate-500 text-[10px]">Factible</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- MODAL DE SIMULACIÓN SIMPY EN VIVO -->
+    <div id="modalSimpy" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-darkcard border border-darkborder rounded-2xl max-w-2xl w-full p-6 space-y-6 shadow-2xl relative">
+            <button onclick="cerrarModalSimulacion()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="space-y-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
+                    <i class="fa-solid fa-play"></i> Simulación Monte Carlo en SimPy
+                </div>
+                <h3 class="text-xl font-bold text-white">Simulador de Eventos Discretos en Tiempo Real</h3>
+                <p class="text-xs text-slate-400">Ejecuta llegadas Poisson y tiempos de atención exponenciales por ventanilla durante horas pico.</p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs text-slate-300 font-semibold block mb-1">Ventanillas a Simular:</label>
+                    <select id="simVentanillas" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-mono">
+                        <option value="13">13 Ventanillas</option>
+                        <option value="14">14 Ventanillas</option>
+                        <option value="15" selected>15 Ventanillas (Óptimo x*)</option>
+                        <option value="16">16 Ventanillas (Escenario Actual)</option>
+                        <option value="17">17 Ventanillas</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-slate-300 font-semibold block mb-1">Duración del Turno:</label>
+                    <select id="simDuracion" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white font-mono">
+                        <option value="1.0">1 Hora Pico (≈ 180 pasajeros)</option>
+                        <option value="4.0" selected>4 Horas Pico (≈ 720 pasajeros)</option>
+                        <option value="8.0">8 Horas (Turno Completo ≈ 1,440 pas)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Simulation Execution Button -->
+            <button id="btnEjecutarSimpy" onclick="correrSimulacionAjax()" 
+                    class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-600 text-white font-bold text-sm shadow-lg shadow-emerald-500/20 hover:brightness-110 transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-microchip"></i>
+                <span>Iniciar Simulación Estocástica</span>
+            </button>
+
+            <!-- Loading Spinner -->
+            <div id="simpyLoading" class="hidden text-center py-4 space-y-2">
+                <i class="fa-solid fa-circle-notch fa-spin text-cyan-400 text-3xl"></i>
+                <p class="text-xs text-slate-400 font-mono">Generando variables aleatorias de arribo y atención en SimPy...</p>
+            </div>
+
+            <!-- Simulation Results Card -->
+            <div id="simpyResultados" class="hidden rounded-xl bg-slate-950 p-4 border border-slate-800 space-y-4">
+                <div class="grid grid-cols-3 gap-3 text-center text-xs">
+                    <div class="p-2 rounded bg-slate-900">
+                        <span class="text-slate-400 block text-[10px]">Pasajeros Atendidos</span>
+                        <span id="simAtendidos" class="text-base font-bold text-white font-mono">-</span>
+                    </div>
+                    <div class="p-2 rounded bg-slate-900">
+                        <span class="text-slate-400 block text-[10px]">Espera Promedio (Wq)</span>
+                        <span id="simWq" class="text-base font-bold text-emerald-400 font-mono">-</span>
+                    </div>
+                    <div class="p-2 rounded bg-slate-900">
+                        <span class="text-slate-400 block text-[10px]">Costo Simulado</span>
+                        <span id="simCosto" class="text-base font-bold text-cyan-400 font-mono">-</span>
+                    </div>
+                </div>
+
+                <!-- Event Log Snippet -->
+                <div class="space-y-1">
+                    <span class="text-[11px] font-mono font-bold text-slate-400 block">Muestra de Registro de Eventos SimPy:</span>
+                    <div id="simLogContainer" class="bg-slate-900/90 rounded-lg p-2.5 font-mono text-[10px] text-slate-300 max-h-36 overflow-y-auto space-y-1 border border-slate-800">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Variables iniciales inyectadas por Django
+    const labelsChart = {{ chart_labels_json|safe }};
+    const datosCostoTotal = {{ chart_costo_total_json|safe }};
+    const datosCostoServicio = {{ chart_costo_servicio_json|safe }};
+    const datosCostoEspera = {{ chart_costo_espera_json|safe }};
+    const datosTiempoEspera = {{ chart_tiempo_espera_json|safe }};
+
+    let chartInstance = null;
+
+    // Inicializar Gráfico Chart.js
+    function initChart() {
+        const ctx = document.getElementById('graficoAnaliticoCanvas').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labelsChart,
+                datasets: [
+                    {
+                        label: 'Costo Total ($/h)',
+                        data: datosCostoTotal,
+                        borderColor: '#38BDF8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#38BDF8',
+                        pointRadius: 6,
+                        yAxisID: 'yCostos',
+                        tension: 0.25
+                    },
+                    {
+                        label: 'Costo Ventanillas ($50·x)',
+                        data: datosCostoServicio,
+                        borderColor: '#64748B',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        yAxisID: 'yCostos',
+                        tension: 0
+                    },
+                    {
+                        label: 'Costo Espera ($40·Lq)',
+                        data: datosCostoEspera,
+                        borderColor: '#F43F5E',
+                        borderDash: [3, 3],
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        yAxisID: 'yCostos',
+                        tension: 0.25
+                    },
+                    {
+                        label: 'Tiempo Espera Wq (min)',
+                        data: datosTiempoEspera,
+                        borderColor: '#FBBF24',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#FBBF24',
+                        pointRadius: 6,
+                        yAxisID: 'yTiempo',
+                        tension: 0.25
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#CBD5E1',
+                            font: { family: 'Inter', size: 11, weight: 'bold' }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#0F172A',
+                        titleColor: '#38BDF8',
+                        bodyColor: '#E2E8F0',
+                        borderColor: '#334155',
+                        borderWidth: 1,
+                        padding: 10
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        ticks: { color: '#94A3B8', font: { family: 'Inter', weight: 'bold' } },
+                        title: { display: true, text: 'Número de Ventanillas Abiertas (x)', color: '#CBD5E1' }
+                    },
+                    yCostos: {
+                        type: 'linear',
+                        position: 'left',
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        ticks: { color: '#38BDF8', font: { family: 'JetBrains Mono' } },
+                        title: { display: true, text: 'Costo Horario ($ USD/h)', color: '#38BDF8' }
+                    },
+                    yTiempo: {
+                        type: 'linear',
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#FBBF24', font: { family: 'JetBrains Mono' } },
+                        title: { display: true, text: 'Tiempo Espera Wq (Minutos)', color: '#FBBF24' }
+                    }
+                }
+            }
+        });
+    }
+
+    // Alternar entre Chart.js y Matplotlib nativo
+    function cambiarVistaGrafico(tipo) {
+        const c1 = document.getElementById('contenedorChartJs');
+        const c2 = document.getElementById('contenedorMatplotlib');
+        const b1 = document.getElementById('btnVerChartJs');
+        const b2 = document.getElementById('btnVerMatplotlib');
+
+        if (tipo === 'chartjs') {
+            c1.classList.remove('hidden');
+            c2.classList.add('hidden');
+            b1.className = 'px-3 py-1.5 rounded-lg font-bold bg-cyan-500 text-white transition-all';
+            b2.className = 'px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition-all';
+        } else {
+            c1.classList.add('hidden');
+            c2.classList.remove('hidden');
+            b2.className = 'px-3 py-1.5 rounded-lg font-bold bg-amber-500 text-slate-950 transition-all';
+            b1.className = 'px-3 py-1.5 rounded-lg font-bold text-slate-400 hover:text-white transition-all';
+        }
+    }
+
+    // Slider interactivo de las 16 ventanillas
+    function cambiarVentanillasEnVivo(val) {
+        val = parseInt(val);
+        document.getElementById('valorVentanillas').innerText = val;
+        document.getElementById('liveX').innerText = val;
+
+        // Actualizar visualmente los 16 puestos de migración
+        for (let i = 1; i <= 16; i++) {
+            const booth = document.getElementById(`booth-${i}`);
+            const statusTxt = document.getElementById(`status-text-${i}`);
+            if (i <= val) {
+                // Abierta
+                booth.className = 'relative rounded-xl p-3 border transition-all duration-300 text-center bg-emerald-500/10 border-emerald-500/40 text-emerald-400';
+                statusTxt.innerText = 'ABIERTA';
+            } else {
+                // Cerrada
+                booth.className = 'relative rounded-xl p-3 border transition-all duration-300 text-center bg-rose-500/10 border-rose-500/30 text-rose-400 opacity-50';
+                statusTxt.innerText = 'CERRADA';
+            }
+        }
+
+        // Llamar API para recalcular métricas teóricas instantáneas
+        fetch(`{% url 'migracion:api_recalcular' %}?c=${val}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.estable) {
+                    document.getElementById('liveRho').innerText = `${data.rho_pct}%`;
+                    document.getElementById('liveWq').innerText = `${data.wq_minutos} min`;
+                    document.getElementById('liveCosto').innerText = `$${data.costo_total} USD/h`;
+                    
+                    const norma = document.getElementById('liveNorma');
+                    if (data.cumple_restriccion) {
+                        norma.className = 'font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded inline-block text-[11px]';
+                        norma.innerText = 'CUMPLE (≤6 min)';
+                    } else {
+                        norma.className = 'font-bold text-rose-400 bg-rose-500/10 px-2 py-1 rounded inline-block text-[11px]';
+                        norma.innerText = 'NO CUMPLE (>6 min)';
+                    }
+                } else {
+                    document.getElementById('liveRho').innerText = '≥100%';
+                    document.getElementById('liveWq').innerText = 'Inestable (∞)';
+                    document.getElementById('liveCosto').innerText = 'Costo Infinito (∞)';
+                    const norma = document.getElementById('liveNorma');
+                    norma.className = 'font-bold text-rose-500 bg-rose-500/20 px-2 py-1 rounded inline-block text-[11px]';
+                    norma.innerText = 'COLA INESTABLE';
+                }
+            })
+            .catch(err => console.error(err));
+    }
+
+    // Modal SimPy
+    function abrirModalSimulacion() {
+        document.getElementById('modalSimpy').classList.remove('hidden');
+    }
+    function cerrarModalSimulacion() {
+        document.getElementById('modalSimpy').classList.add('hidden');
+    }
+
+    // Ejecutar simulación SimPy por AJAX
+    function correrSimulacionAjax() {
+        const v = document.getElementById('simVentanillas').value;
+        const d = document.getElementById('simDuracion').value;
+
+        document.getElementById('btnEjecutarSimpy').classList.add('hidden');
+        document.getElementById('simpyLoading').classList.remove('hidden');
+        document.getElementById('simpyResultados').classList.add('hidden');
+
+        fetch(`{% url 'migracion:api_simular' %}?ventanillas=${v}&duracion=${d}`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('simpyLoading').classList.add('hidden');
+                document.getElementById('btnEjecutarSimpy').classList.remove('hidden');
+                document.getElementById('simpyResultados').classList.remove('hidden');
+
+                document.getElementById('simAtendidos').innerText = `${data.total_atendidos} pas`;
+                document.getElementById('simWq').innerText = `${data.wq_minutos} min`;
+                document.getElementById('simCosto').innerText = `$${data.costo_total} USD/h`;
+
+                // Render logs
+                const logCont = document.getElementById('simLogContainer');
+                logCont.innerHTML = '';
+                data.eventos.slice(0, 15).forEach(ev => {
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between py-0.5 border-b border-slate-800/60';
+                    row.innerHTML = `<span>[${ev.tiempo_min} min] Pasajero #${ev.id} -> <strong>${ev.evento.toUpperCase()}</strong></span>
+                                     <span class="text-slate-500">${ev.espera_min !== undefined ? 'Espera: ' + ev.espera_min + 'm' : ''}</span>`;
+                    logCont.appendChild(row);
+                });
+            })
+            .catch(err => {
+                alert('Error al ejecutar SimPy: ' + err);
+                document.getElementById('simpyLoading').classList.add('hidden');
+                document.getElementById('btnEjecutarSimpy').classList.remove('hidden');
+            });
+    }
+
+    // Optimización PuLP en vivo
+    function ejecutarOptimizacionEnVivo() {
+        fetch(`{% url 'migracion:api_optimizar' %}`)
+            .then(res => res.json())
+            .then(data => {
+                alert(`¡Optimización PuLP Resuelta Exitosamente!\n\n` +
+                      `Estado Solver: ${data.estado}\n` +
+                      `Ventanillas Óptimas (x*): ${data.x_optimo}\n` +
+                      `Costo Total Resultante (y*): $${data.y_optimo} USD/h\n` +
+                      `Tiempo Promedio de Espera: ${data.wq_minutos} min\n` +
+                      `Ahorro Horario vs Reportado: $${data.ahorro_hora_reportado} USD/h (${data.pct_ahorro_reportado}%)\n` +
+                      `Ahorro Anual Proyectado: $${data.ahorro_anual.toLocaleString()} USD`);
+            });
+    }
+
+    // Auto-arranque al cargar el DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        initChart();
+    });
+</script>
+{% endblock %}
+

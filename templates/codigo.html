@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Código PuLP & SimPy | Exclusivo para el Profesor{% endblock %}
+
+{% block content %}
+<div class="space-y-8 max-w-5xl mx-auto">
+
+    <!-- Header -->
+    <div class="space-y-2 border-b border-slate-800 pb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-xs font-bold">
+            <i class="fa-solid fa-graduation-cap"></i> Módulo de Validación Académica
+        </div>
+        <h1 class="text-3xl font-extrabold text-white">
+            Inspección de Código: <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-cyan-400">PuLP y SimPy</span>
+        </h1>
+        <p class="text-slate-300 text-sm">
+            Verificación estricta del mandato docente: <em class="text-white">"Definir exclusivamente las variables x (número entero de ventanillas abiertas) e y (tiempo promedio de espera o costo resultante)"</em>.
+        </p>
+    </div>
+
+    <!-- Banner de Cumplimiento de Variables -->
+    <div class="p-5 rounded-2xl bg-slate-900 border-2 border-amber-500/40 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold text-cyan-400 uppercase">Variable x</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">pulp.LpInteger</span>
+            </div>
+            <div class="text-lg font-bold text-white font-mono">x = pulp.LpVariable('x', 13, 20, LpInteger)</div>
+            <p class="text-xs text-slate-400">Representa el número entero de ventanillas abiertas. Cota inferior $x \ge 13$ garantizada por la condición de estabilidad ($\lambda/\mu = 12$).</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-1">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-mono font-bold text-amber-400 uppercase">Variable y</span>
+                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">pulp.LpContinuous</span>
+            </div>
+            <div class="text-lg font-bold text-white font-mono">y = pulp.LpVariable('y', lowBound=0, LpContinuous)</div>
+            <p class="text-xs text-slate-400">Representa el costo total resultante por hora ($ USD/h) a minimizar, acoplado mediante la envolvente convexa de costos de colas.</p>
+        </div>
+    </div>
+
+    <!-- Código PuLP -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder overflow-hidden">
+        <div class="px-6 py-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-brands fa-python text-amber-400 text-lg"></i>
+                <h3 class="text-base font-bold text-white font-mono">migracion/core/optimization.py (PuLP)</h3>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-400 font-mono">Optimización Lineal / Entera</span>
+        </div>
+        <div class="p-4 bg-[#1d1f21] overflow-x-auto text-xs">
+            <pre><code class="language-python">{{ codigo_pulp }}</code></pre>
+        </div>
+    </div>
+
+    <!-- Código SimPy -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder overflow-hidden">
+        <div class="px-6 py-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-network-wired text-cyan-400 text-lg"></i>
+                <h3 class="text-base font-bold text-white font-mono">migracion/core/simulation.py (SimPy)</h3>
+            </div>
+            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-400 font-mono">Simulación de Eventos Discretos</span>
+        </div>
+        <div class="p-4 bg-[#1d1f21] overflow-x-auto text-xs">
+            <pre><code class="language-python">{{ codigo_simpy }}</code></pre>
+        </div>
+    </div>
+
+    <!-- Gráfico Nativo de Matplotlib Exportado -->
+    <div class="rounded-2xl bg-darkcard border border-darkborder p-6 space-y-4">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-image text-emerald-400"></i>
+                    Gráfico Analítico Generado en Matplotlib (Nativo Python)
+                </h3>
+                <p class="text-xs text-slate-400">Tiempo de Espera vs Costo Total generado directamente desde el backend de Python.</p>
+            </div>
+            <a href="/static/img/grafico_analitico.png" download="grafico_analitico_migracion.png" 
+               class="px-3.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 text-xs font-semibold border border-slate-700 transition-all flex items-center gap-1.5">
+                <i class="fa-solid fa-download"></i> Descargar Imagen PNG
+            </a>
+        </div>
+
+        <div class="text-center p-2 rounded-xl bg-slate-950 border border-slate-800">
+            {% if grafico_b64 %}
+            <img src="data:image/png;base64,{{ grafico_b64 }}" 
+                 alt="Gráfico Matplotlib" 
+                 class="rounded-lg max-w-full h-auto mx-auto shadow-2xl">
+            {% else %}
+            <p class="text-slate-400 py-8 text-sm">Cargando gráfico...</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
